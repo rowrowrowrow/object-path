@@ -104,6 +104,13 @@
         return set(obj, path.split('.').map(getKey), value, doNotReplace);
       }
       var currentPath = path[0];
+      if (currentPath === 'MAP' && isArray(obj)) {
+        path.shift();
+        return obj
+          .map(i => {
+            return objectPath.set(i, path, value, doNotReplace);
+          });
+      }
       var currentValue = getShallowProperty(obj, currentPath);
       if (path.length === 1) {
         if (currentValue === void 0 || !doNotReplace) {
@@ -236,6 +243,13 @@
       }
 
       var currentPath = getKey(path[0]);
+      if (currentPath === 'MAP' && isArray(obj)) {
+        path.shift();
+        return obj
+          .map(i => {
+            return objectPath.get(i, path, defaultValue);
+          });
+      }
       var nextObj = getShallowProperty(obj, currentPath)
       if (nextObj === void 0) {
         return defaultValue;
